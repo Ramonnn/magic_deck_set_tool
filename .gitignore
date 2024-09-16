@@ -1,0 +1,13 @@
+White.txt
+White.txt:Zone.Identifier
+poetry.lock
+card_info.csv
+AllPrintings.psql:Zone.Identifier
+AllPrintings.sql:Zone.Identifier
+example_deck.txt
+test.txt
+application.log
+__pycache__/
+.env
+init.psql
+db_init.sql
