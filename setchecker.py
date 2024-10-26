@@ -197,6 +197,8 @@ def fetch_boosters(set_code: str, uuid: str):
         booster_index = booster[6]
         booster_name = booster[1]
 
+        total_weight = total_weight_lookup.get(booster_name, None)
+        
         booster_pack = BoosterPack(
             set_code=booster[3],
             booster_name=booster_name,
@@ -204,12 +206,12 @@ def fetch_boosters(set_code: str, uuid: str):
             sheet_name=booster[5],
             sheet_picks=booster[7],
             booster_weight=booster[8],
+            booster_weight_ratio=booster[8] / total_weight if booster[8] else None,
         )
 
         if booster_pack.booster_name in booster_dict:
             booster_dict[booster_pack.booster_name]["BoosterPacks"].append(booster_pack)
         else:
-            total_weight = total_weight_lookup.get(booster_name, None)
             booster_dict[booster_pack.booster_name] = {
                 "TotalBoosterWeight": total_weight,
                 "BoosterPacks": [booster_pack],
@@ -288,6 +290,16 @@ def fetch_cardstats(uuid: str, boosters, sheet):
 
     return cardweight_list
 
+def CalculateDropChance(card: CardSet):
+    """
+    (Booster (Type) Weight / Total Booster (Types) Weight) * Sheet Pick * (Card (on sheet) Weight / Total Sheet Weight)
+    Sheet name from BoosterPack needs to be the same as sheet name from SheetCard.
+    Join SheetCard onto BoosterPack where SheetCard.Sheetname = BoosterPack.Sheetname
+    options:
+        - look to see if I can do a join in PSQL
+        - join them as dictionaries in Python
+    """
+    pass
 
 def main(file_path):
     deck_data = read_deck(file_path)
@@ -321,7 +333,7 @@ def main(file_path):
                     print(f"       - Sheet Name: {booster_pack.sheet_name}")
                     print(f"       - Sheet Picks: {booster_pack.sheet_picks}")
                     print(f"       - Booster Weight: {booster_pack.booster_weight} \n")
-
+                    print(f"       - Booster Weight Ratio: {booster_pack.booster_weight_ratio} \n")
 
 if __name__ == "__main__":
     main("example_deck.txt")

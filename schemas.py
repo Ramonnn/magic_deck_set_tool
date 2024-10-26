@@ -127,6 +127,7 @@ class BoosterPack:
     booster_weight: int
     sheet_name: str
     sheet_picks: str
+    booster_weight_ratio: Optional = None
 
 
 @dataclass
